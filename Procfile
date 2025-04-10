@@ -1,0 +1,1 @@
+worker: python3 odin_bot.py 
