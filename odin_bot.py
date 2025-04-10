@@ -144,12 +144,23 @@ async def send_telegram_message(message):
     
     for chat_id in active_chats.copy():
         try:
+            # 首先发送图片
+            with open('labi.png', 'rb') as photo:
+                await bot.send_photo(
+                    chat_id=chat_id,
+                    photo=photo,
+                    caption=message,
+                    parse_mode=ParseMode.HTML
+                )
+            log_message(f"成功发送消息和图片到群组 {chat_id}")
+        except FileNotFoundError:
+            log_message("找不到图片文件 labi.png")
+            # 如果找不到图片，只发送文本消息
             await bot.send_message(
                 chat_id=chat_id,
                 text=message,
                 parse_mode=ParseMode.HTML
             )
-            log_message(f"成功发送消息到群组 {chat_id}")
         except Exception as e:
             log_message(f"发送消息到群组 {chat_id} 失败: {e}")
             if "Chat not found" in str(e) or "Forbidden" in str(e):
